@@ -1,4 +1,5 @@
 import 'package:filmuygulamasi/classes/Kategoriler.dart';
+import 'package:filmuygulamasi/classes/Kategorilerdao.dart';
 import 'package:filmuygulamasi/pages/FilmlerSayfa.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +11,7 @@ class Anasayfa extends StatefulWidget {
 }
 
 class _AnasayfaState extends State<Anasayfa> {
-  Future<List<Kategoriler>>tumKategorileriGetir()async{
+  /*Future<List<Kategoriler>>tumKategorileriGetir()async{
     var kategoriListesi = <Kategoriler>[];
     var k1=Kategoriler(1, "Aksiyon");
     var k2=Kategoriler(2, "Aile");
@@ -52,16 +53,25 @@ class _AnasayfaState extends State<Anasayfa> {
 
   }
 
+*/
+ Future<List<Kategoriler>>tumKategorileriGoster()async{
+    var kategorilerListesi=await Kategorilerdao().tumKategorileriGetir();
+    print("Veritabanından gelen kategoriler: $kategorilerListesi");
+    return kategorilerListesi;
+  }
+
+
+
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Anasayfa"),
-      ),
-      body: FutureBuilder<List<Kategoriler>>(
-          future: tumKategorileriGetir(),
+        appBar: AppBar(
+          title: const Text("Anasayfa"),
+        ),
+        body: FutureBuilder<List<Kategoriler>>(
+          future: tumKategorileriGoster(),
           builder: (context, snapshot) {
             if(snapshot.hasData)
             {
@@ -84,7 +94,7 @@ class _AnasayfaState extends State<Anasayfa> {
                           children: [
                             Padding(
                               padding: const EdgeInsets.all(16.0),
-                              child: Text(kategori.kategoriAd,style: const TextStyle(fontSize: 18.0,color: Colors.white,),),
+                              child: Text("${kategori.kategoriAd}",style: const TextStyle(fontSize: 18.0,color: Colors.white,),),
                             ),
                             const Padding(padding: EdgeInsets.all(16.0),child: Icon(Icons.list,color: Colors.white,),),
                           ],
@@ -95,13 +105,13 @@ class _AnasayfaState extends State<Anasayfa> {
                 },
               );
             }else
-              {
-                return Center();
-              }
+            {
+              return Center();
+            }
 
 
           },
-      )
+        )
 
 
     );
